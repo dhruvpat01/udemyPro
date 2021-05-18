@@ -1,8 +1,13 @@
 body{
-    background-color: red;
-    font-size: 5rem;
-    /* background-image: linear-gradient(180deg, red, yellow); */
+    
+    /* background-image: linear-gradient(135deg, #fbc6a4,#f4a9a8,#ce97b0); */
+    background-image: -webkit-linear-gradient(-35deg,#fbc6a4 50%, #f4a9a8 50%);
+    
 }
-h1{
-    color:green;
+input{
+    width: 20%;
+}
+
+.op{
+    background-color: #ce97b0;
 }

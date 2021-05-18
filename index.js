@@ -8,9 +8,11 @@ const verifi = require("./verifyTokens")
 var path = require('path')
 const ejs = require("ejs");
 const User = require("./modals/users");
-const url = "mongodb+srv://daksh:6B29jtiTryRXItXG@cluster0.vdagk.mongodb.net/udemyDB?retryWrites=true&w=majority"
+require('dotenv').config();
+const url = process.env.MONGODB_URL;
 const passwordValidator = require('password-validator');
 const check = new passwordValidator();
+
 
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -18,7 +20,7 @@ mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 // app.use(express.static("public"));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 app.set('view engine',"ejs");
 
 
@@ -117,7 +119,7 @@ app.post("/login",(req,res)=>{
 				bcrypt.compare(req.body.password, foundUser.password, function(err, result) {
 					    // result == true
 					    if(result === true){
-							const token = jwt.sign({email:foundUser.email},"Thisismysecret",{ expiresIn: '1h' });
+							const token = jwt.sign({email:foundUser.email},process.env.SECRET,{ expiresIn: '1h' });
 							res.header('auth-token',token)
 							
 					      
@@ -153,6 +155,11 @@ app.get("/admin",(req,res)=>{
 
 app.post("/admin",(req,res)=>{
 
+})
+
+//all_course
+app.get("/all_course",(req,res)=>{
+	res.render("all_course")
 })
 
 //Listener
