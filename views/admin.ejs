@@ -1,0 +1,104 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin</title>
+
+    <!-- css file -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- bootstrap cdn -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+        integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <link rel="shortcut icon" href="https://img.icons8.com/fluent/48/000000/pets.png" type="image" /> -->
+
+
+</head>
+
+<body>
+    <div class="container-fluid cont-login">
+        <div class="row">
+            <!-- <div class="col-sm-12 col-md-6 col-lg-5 left-side d-none d-md-block">
+                <div class="container">
+                    <div class="row login-left">
+                        <p class="brand-name">Put a new course</p>
+                        <!-- <img class="img-fluid" src="images/add-pets.svg"> -->
+
+                    </div>
+
+                </div>
+            </div> -->
+
+            <div class="col-sm-12 col-md-6 col-lg-7 right-side">
+                <div class="login-form">
+
+                    <form action="admin" method="POST">
+                        <br>
+                        <br>
+                        <% if(typeof errors != 'undefined'){ %> <% errors.forEach(function(error) { %>
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <%= error.msg %>
+                        </div>
+                        <% }); %>
+                        <% } %>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <h1>Course Details</h1>
+                            <label class="name">Course Name<span class="compulsory">*</span></label>
+                            <input type="text" class="form-control" name="petname" placeholder="Enter name"
+                                value="<%= typeof petname != 'undefined' ? petname : '' %>">
+                        </div>
+                        <div class="form-group">
+                            <label class="name">Owner Email<span class="compulsory">*</span></label>
+                            <input type="email" class="form-control" name="petname" placeholder="Enter name"
+                                value="<%= typeof petname != 'undefined' ? petname : '' %>">
+                        </div>
+                        <div class="form-group">
+                            <label>Course Title<span class="compulsory">*</span></label>
+                            <input type="text" class="form-control" name='petage' placeholder="Enter age"
+                                value="<%= typeof petage != 'undefined' ? petage : '' %>">
+                        </div>
+                        <div class="form-group">
+                            <label>Course Description<span class="compulsory">*</span></label>
+                            <input type="text" class="form-control" name="breed" placeholder="Enter breed"
+                                value="<%= typeof breed != 'undefined' ? breed : '' %>">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Start Date<span class="compulsory">*</span></label>
+                            <input type="date" class="form-control" name="color" placeholder="Enter color"
+                                value="<%= typeof color != 'undefined' ? color : '' %>">
+                        </div>
+                        <div class="form-group">
+                            <label>End Date<span class="compulsory">*</span></label>
+                            <input type="date" class="form-control" name="phone" placeholder="Enter phone"
+                                value="<%= typeof phone != 'undefined' ? phone : '' %>">
+                        </div>
+                        <div class="form-group">
+                            <label class="name">Minimum Students<span class="compulsory">*</span></label>
+                            <input type="number" class="form-control" name="petname" placeholder="Enter name"
+                                value="<%= typeof petname != 'undefined' ? petname : '' %>">
+                        </div>
+                        <div class="form-group">
+                            <label class="name">Maximum Students<span class="compulsory">*</span></label>
+                            <input type="number" class="form-control" name="petname" placeholder="Enter name"
+                                value="<%= typeof petname != 'undefined' ? petname : '' %>">
+                        </div>
+                       
+                        <button type="submit" class="btn btn-outline-success">Add Course</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
