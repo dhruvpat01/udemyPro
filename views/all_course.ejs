@@ -25,13 +25,50 @@
           </div>
         </div>
       </nav>
+</section>
+<section id="title" class="colored-section  p-5 justify-content-center"></section>
+  <div class="container">
+    <form class="form-inline mr-auto" method=>
+      <div class="row">
+      <input class="col-10" id="bar" type="text" name="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success btn-rounded btn-md my-0 col-2" id="searchs" value="Search"
+        type="submit">Search</button>
+        </div>
+    </form>
+  </div>
+</section>
 
-      
-        
-   
+
+
+
+<section id="pricing" class="white-section p-3 m-3">
+  <div class="row p-3 m-4">
+    
+          <% courses.forEach(function(course){ %>
+    <div class="pricing-component col-lg-4 col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <img class="student_image" src="/public/images/student.png" alt="Course-profile">
+        </div>
+        <div class="card-body">
+          <h3>
+            <%= course.course_title %> 
+          </h3>
+          <p>Course technology</p>
+          <p><%= course.date %></p>
+          <form>
+            <button type="submit" class="form-control btn btn-dark btn-lg button2">Enroll</button>
+          </form>
+          </div>
+          </div>
+          </div>
+          <% }); %>
+    
+  </div>
+
+
 
 </section>
-   
     
 
     <%-include("partials/footer")%>

@@ -2,21 +2,25 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const app = express();
 const mongoose = require("mongoose")
+const cookieParser = require('cookie-parser')
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const verifi = require("./verifyTokens")
+
 var path = require('path')
 const ejs = require("ejs");
 const User = require("./modals/users");
+const Course = require("./modals/courses");
 require('dotenv').config();
 const url = process.env.MONGODB_URL;
 const passwordValidator = require('password-validator');
 const check = new passwordValidator();
 
 
+
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 
-
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 // app.use(express.static("public"));
@@ -120,7 +124,9 @@ app.post("/login",(req,res)=>{
 					    // result == true
 					    if(result === true){
 							const token = jwt.sign({email:foundUser.email},process.env.SECRET,{ expiresIn: '1h' });
-							res.header('auth-token',token)
+							// res.header('auth-token',token)
+							res.cookie("jwt", token, {secure: false, httpOnly: true})
+    						res.send(token)
 							
 					      
 					
@@ -138,14 +144,14 @@ app.post("/login",(req,res)=>{
 	console.log(req.body);
 })
 
+app.get("/logout",(req,res)=>{
+	res.clearCookie("jwt");
+	res.send("clearing cookies")
+})
+
 app.get("/home", verifi,(req,res)=>{
-	jwt.verify(token, 'Thisismysecr', function(err, decoded) {
-		console.log("asdsdd") // bar
-	  });
-	
-		res.json({message:"Helooo adfvsdf"});
-	
-	
+	console.log(req.user);
+	res.send("Hello World");
 })
 
 //Admin side
@@ -154,13 +160,47 @@ app.get("/admin",(req,res)=>{
 })
 
 app.post("/admin",(req,res)=>{
+	const { course_name,email,course_title,course_description,date,start_time,end_time,min,max} = req.body;
+	console.log(req.body)
+	const newCourse = new Course({
+		course_name,
+		email,
+		course_title,
+		course_description,
+		date,
+		start_time,
+		end_time,
+		min,
+		max	
+	});
+
+	newCourse.save((err)=>{
+		if(err){
+			console.log(err)
+		}
+		else{
+			console.log("successful saved")
+		}
+	})
+
 
 })
 
 //all_course
 app.get("/all_course",(req,res)=>{
-	res.render("all_course")
+	Course.find({}, (err, course) => {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log(req.user);
+			res.render('all_course', {
+				courses  : course,		
+			});
+		}
+	});
 })
+
+
 
 //Listener
 
