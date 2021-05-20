@@ -1,0 +1,92 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Register</title>
+
+    <!-- css file -->
+    
+
+    <!-- bootstrap cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <!-- <link rel="shortcut icon" href="https://img.icons8.com/fluent/48/000000/pets.png" type="image" /> -->
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+
+
+</head>
+
+<body>
+
+<section class="head_nav">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light op">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+</section>
+
+
+<section>
+<% course.forEach(function(course){ %>
+    <% if(name==course._id){%>
+    <div>
+        <img src="" class="pet-profile justify-content-center" alt="User Photo Here">
+    </div>
+    <hr>
+    <div >
+        Course_name: <h2><%= course.course_name %> </h2>
+        <hr>
+        Email: <%= course.email %> 
+        <hr>
+        course_title:<%= course.course_title %> 
+        <hr>
+        course_description:<%= course.course_description %> 
+        <hr>
+        date:<%= course.date %> 
+        <hr>
+        start_time:<%= course.start_time %> 
+        <hr>
+        <hr>
+        end_time:<%= course.end_time %> 
+        <hr>
+        <hr>
+        min:<%= course.min %> 
+        <hr>
+        <hr>
+        max:<%= course.max %> 
+        <hr>
+        <div class="row justify-content-center ">
+            <div class="col-lg-6">
+                <button type="submit" class="btn btn-dark btn-lg button1 j">Enroll</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    <% }%>
+    <% }); %>
+</section>
+</body>
+
+</html>

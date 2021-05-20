@@ -11,6 +11,7 @@ var path = require('path')
 const ejs = require("ejs");
 const User = require("./modals/users");
 const Course = require("./modals/courses");
+const Student = require("./modals/students")
 require('dotenv').config();
 const url = process.env.MONGODB_URL;
 const passwordValidator = require('password-validator');
@@ -123,7 +124,7 @@ app.post("/login",(req,res)=>{
 				bcrypt.compare(req.body.password, foundUser.password, function(err, result) {
 					    // result == true
 					    if(result === true){
-							const token = jwt.sign({email:foundUser.email},process.env.SECRET,{ expiresIn: '1h' });
+							const token = jwt.sign({email:foundUser.email,role:"teacher"},process.env.SECRET,{ expiresIn: '1h' });
 							// res.header('auth-token',token)
 							res.cookie("jwt", token, {secure: false, httpOnly: true})
     						res.send(token)
@@ -150,13 +151,21 @@ app.get("/logout",(req,res)=>{
 })
 
 app.get("/home", verifi,(req,res)=>{
-	console.log(req.user);
+	
 	res.send("Hello World");
 })
 
 //Admin side
-app.get("/admin",(req,res)=>{
-	res.render("admin")
+app.get("/admin",verifi,(req,res)=>{
+	
+	if(req.user.role==="teacher"){
+	
+		res.render("admin")
+	}
+	else{
+		res.send("Permission for this route is restricted")
+	}
+	
 })
 
 app.post("/admin",(req,res)=>{
@@ -199,6 +208,74 @@ app.get("/all_course",(req,res)=>{
 		}
 	});
 })
+
+app.post("/all_course",verifi,(req,res)=>{
+	console.log(req.body.id)
+	const newStudent = new Student({
+		email:req.user.email,
+		courses:req.body.id
+	});
+	newStudent.save((err)=>{
+		if(err){
+			console.log(err)
+		}
+		else{
+			console.log("Successfully Saved")
+		}
+	})
+
+
+
+})
+
+
+//User
+app.get("/user",verifi,(req,res)=>{
+	Course.find({ email: req.user.email }, (err, course) => {
+		if (err) {
+			console.log(err);
+		} else {
+			
+			
+		
+			res.render('user', { courses: course});
+		}
+	});
+	// res.render("user");
+})
+
+//Student
+
+app.get("/student",verifi,(req,res)=>{
+	Student.find({ email: req.user.email }, (err, cour) => {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log(cour[0])
+			res.send("student page")
+			// res.render("student",{courses:cour})
+		}
+	});
+	// res.render("user");
+})
+
+
+//Course_Profile
+app.get('/all_course/:topic', verifi, (req, res) => {
+	const re = req.params.topic;
+	console.log(re);
+	Course.find({}, (err, courses) => {
+		if (err) {
+			console.log(err);
+		} else {
+			res.render('course', {
+				course : courses,
+				user : req.user,
+				name : re
+			});
+		}
+	});
+});
 
 
 
