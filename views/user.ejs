@@ -3,24 +3,29 @@
 <section class="head_nav">
     <nav class="navbar navbar-expand-lg navbar-light bg-light op">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <a class="navbar-brand" href="#">MyCourses</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
+                <a class="nav-link" href="/login">login</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
+                <a class="nav-link" href="/register">Register</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                <a class="nav-link" href="/logout">logout</a>
               </li>
+              <%if(rol==="admin"){%>
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin">create_course</a>
+                </li>
+              <%}%>
             </ul>
           </div>
         </div>
@@ -33,44 +38,68 @@
     </div>
 </div>
 <hr>
-
-<div id="Name">
-    Name: 
+<% user.forEach(function(use){ %>
+  <div id="Name">
+    Name: <%= use.name %>
     <hr>
     <div id="Email">
-        Email: 
+        Email: <%= use.email %>
     </div>
     <hr>
     <div id="Email">
-        Phone No:
+        Phone No:<%= use.phone %>
     </div>
 
 </div>
+<%}) %>
+
 
 <section id="pricing" class="white-section">
     <h2 class="heading1">Your Courses</h2>
     <p></p>
     <div class="row">
-
+     <% if(rol==="admin"){ %>
         <% courses.forEach(function(course){ %>
-            <div class="pricing-component col-lg-4 col-md-6">
-                <div class="card">
-                  <div class="card-header">
-                    <img class="student_image" src="/public/images/student.png" alt="Course-profile">
+          <div class="pricing-component col-lg-4 col-md-6">
+              <div class="card">
+                <div class="card-header">
+                  <img class="student_image" src="/public/images/student.png" alt="Course-profile">
+                </div>
+                <div class="card-body">
+                  <h3>
+                    <%= course.course_title %> 
+                  </h3>
+                  <p>Duration : <%= course.duration %></p>
+                  <p><%= course.start_date %></p>
+                  <form action="/<%= course.course_title %>">
+                    <button type="submit" class="form-control btn btn-dark btn-lg button2">Enroll</button>
+                  </form>
                   </div>
-                  <div class="card-body">
-                    <h3>
-                      <%= course.course_title %> 
-                    </h3>
-                    <p>Course technology</p>
-                    <p><%= course.date %></p>
-                    <form>
-                      <button type="submit" class="form-control btn btn-dark btn-lg button2">Enroll</button>
-                    </form>
-                    </div>
-                    </div>
-                    </div>
-        <% }); %>
+                  </div>
+                  </div>
+      <% }); %>
+     <% }else{%>
+      <% students.forEach(function(stu){ %>
+        <div class="pricing-component col-lg-4 col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <img class="student_image" src="/public/images/student.png" alt="Course-profile">
+              </div>
+              <div class="card-body">
+                <h3>
+                  <%= stu.course_title %> 
+                </h3>
+                <p>Duration : <%= stu.duration %></p>
+                <p><%= stu.start_date %></p>
+                <form action="/<%= stu.course_title %>">
+                  <button type="submit" class="form-control btn btn-dark btn-lg button2">Enroll</button>
+                </form>
+                </div>
+                </div>
+                </div>
+    <% }); %>
+     <% } %>
+       
 </section>
 
 <%-include("partials/footer")%>

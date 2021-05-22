@@ -16,6 +16,8 @@ require('dotenv').config();
 const url = process.env.MONGODB_URL;
 const passwordValidator = require('password-validator');
 const check = new passwordValidator();
+let Logged_in=false
+let Role = ""
 
 
 
@@ -37,7 +39,33 @@ app.set('view engine',"ejs");
 //Api Endpoints
 
 app.get("/",(req,res)=>{
-  res.send("Hello")
+	if(Logged_in){
+		Course.find({}, (err, course) => {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log(req.user);
+				res.render('all_course', {
+					courses  : course,
+					rol      : Role		
+				});
+			}
+		});
+	}else{
+		Course.find({}, (err, course) => {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log(req.user);
+				res.render('home', {
+					courses  : course,		
+				});
+			}
+		});
+		
+	}
+	
+  
 })
 
 //Register Route
@@ -46,6 +74,7 @@ app.get("/register",(req,res)=>{
 })
 
 app.post("/register",(req,res)=>{
+	const role="student"
     
   const { name, phone, email, password, password2 } = req.body;
 
@@ -83,7 +112,8 @@ app.post("/register",(req,res)=>{
 						name,
 						email,
 						password,
-						phone
+						phone,
+						role
 						// profile_img : loc.url
 					});
 					
@@ -122,12 +152,13 @@ app.post("/login",(req,res)=>{
 		else{
 			if(foundUser){
 				bcrypt.compare(req.body.password, foundUser.password, function(err, result) {
-					    // result == true
 					    if(result === true){
-							const token = jwt.sign({email:foundUser.email,role:"teacher"},process.env.SECRET,{ expiresIn: '1h' });
+							Role = foundUser.role
+							Logged_in = true
+							const token = jwt.sign({email:foundUser.email,role:foundUser.role},process.env.SECRET,{ expiresIn: '1h' });
 							// res.header('auth-token',token)
 							res.cookie("jwt", token, {secure: false, httpOnly: true})
-    						res.send(token)
+    						res.redirect("/")
 							
 					      
 					
@@ -146,19 +177,21 @@ app.post("/login",(req,res)=>{
 })
 
 app.get("/logout",(req,res)=>{
+	Logged_in = false
 	res.clearCookie("jwt");
-	res.send("clearing cookies")
+	
+	res.redirect("/")
 })
 
-app.get("/home", verifi,(req,res)=>{
+// app.get("/home", verifi,(req,res)=>{
 	
-	res.send("Hello World");
-})
+// 	res.send("Hello World");
+// })
 
 //Admin side
 app.get("/admin",verifi,(req,res)=>{
 	
-	if(req.user.role==="teacher"){
+	if(req.user.role==="admin"){
 	
 		res.render("admin")
 	}
@@ -169,16 +202,16 @@ app.get("/admin",verifi,(req,res)=>{
 })
 
 app.post("/admin",(req,res)=>{
-	const { course_name,email,course_title,course_description,date,start_time,end_time,min,max} = req.body;
+	const { course_name,email,course_title,course_description,duration,start_date,end_date,min,max} = req.body;
 	console.log(req.body)
 	const newCourse = new Course({
 		course_name,
 		email,
 		course_title,
 		course_description,
-		date,
-		start_time,
-		end_time,
+		duration,
+		start_date,
+		end_date,
 		min,
 		max	
 	});
@@ -196,86 +229,148 @@ app.post("/admin",(req,res)=>{
 })
 
 //all_course
-app.get("/all_course",(req,res)=>{
-	Course.find({}, (err, course) => {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log(req.user);
-			res.render('all_course', {
-				courses  : course,		
-			});
-		}
-	});
-})
+// app.get("/all_course",verifi,(req,res)=>{
+// 	Course.find({}, (err, course) => {
+// 		if (err) {
+// 			console.log(err);
+// 		} else {
+// 			console.log(req.user);
+// 			res.render('all_course', {
+// 				courses  : course,		
+// 			});
+// 		}
+// 	});
+// })
 
-app.post("/all_course",verifi,(req,res)=>{
-	console.log(req.body.id)
-	const newStudent = new Student({
-		email:req.user.email,
-		courses:req.body.id
-	});
-	newStudent.save((err)=>{
-		if(err){
-			console.log(err)
-		}
-		else{
-			console.log("Successfully Saved")
-		}
-	})
+// app.post("/all_course",verifi,(req,res)=>{
+	
+// 	const newStudent = new Student({
+// 		email:req.user.email,
+// 		courses:req.body.id
+// 	});
+// 	newStudent.save((err)=>{
+// 		if(err){
+// 			console.log(err)
+// 		}
+// 		else{
+// 			console.log("Successfully Saved")
+// 		}
+// 	})
 
 
 
-})
+// })
 
 
 //User
 app.get("/user",verifi,(req,res)=>{
-	Course.find({ email: req.user.email }, (err, course) => {
-		if (err) {
-			console.log(err);
-		} else {
+	User.find({ email: req.user.email }, (err, use) =>{
+		if(err){
+			console.log(err)
+		}else{
+			if(Role==="admin"){
+				Course.find({ email: req.user.email }, (err, course) => {
+					if (err) {
+						console.log(err);
+					} else {
+						res.render('user', { 
+							courses: course,
+							user   :use,
+							rol 	:Role
+						});
+						
+					}
+				});
+			}
+			else{
+				Student.find({email: req.user.email},(err, stud)=>{
+					if(err){
+						console.log(err)
+					}else{
+						res.render('user', { 
+							students: stud,
+							user   :use,
+							rol		:Role
+							
+						});
+					}
+				})
+			}
 			
-			
-		
-			res.render('user', { courses: course});
+
 		}
-	});
+});
+
 	// res.render("user");
 })
 
-//Student
 
-app.get("/student",verifi,(req,res)=>{
-	Student.find({ email: req.user.email }, (err, cour) => {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log(cour[0])
-			res.send("student page")
-			// res.render("student",{courses:cour})
-		}
-	});
-	// res.render("user");
-})
+
+
 
 
 //Course_Profile
-app.get('/all_course/:topic', verifi, (req, res) => {
+app.get('/:topic', verifi, (req, res) => {
 	const re = req.params.topic;
 	console.log(re);
+	
 	Course.find({}, (err, courses) => {
 		if (err) {
 			console.log(err);
 		} else {
-			res.render('course', {
-				course : courses,
-				user : req.user,
-				name : re
-			});
+			Student.find({course_title:re},(err,stu)=>{
+				if (err) {
+					console.log(err);
+				} else {
+					res.render('course', {
+						course : courses,
+						user : req.user,
+						student : stu,
+						name : re,
+						rol   :Role
+					});
+				
+				}
+		
+			})
+			
 		}
 	});
 });
+
+app.post('/:topic',verifi, (req, res)=>{
+	console.log(req.body)
+	Student.findOne({course_title:req.body.course_title,email:req.user.email},(err,foundUser)=>{
+		if(err){
+			console.log(err)
+		}else{
+			if(foundUser){
+				res.send("You have already enrolled for this course")
+			}else{
+				const newStudent = new Student({
+					email:req.user.email,
+					course_title:req.body.course_title,
+					duration:req.body.duration,
+					start_date:req.body.start_date
+			
+				});
+				newStudent.save((err)=>{
+					if(err){
+						console.log(err)
+					}
+					else{
+						console.log("Successfully Saved")
+						res.redirect("/")
+					}
+				})
+
+			}
+		}
+	})
+	
+});
+
+
 
 
 

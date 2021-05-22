@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const CourseSchema = new mongoose.Schema({
+ const CourseSchema = new mongoose.Schema({
 	course_name          : {
 		type     : String,
 		required : true
@@ -17,16 +17,16 @@ const CourseSchema = new mongoose.Schema({
         type     : String,
         required  : true
     },
-    date:{
-        type     :Date,
+    duration:{
+        type     :String,
         required: true
     },
-    start_time:{
-        type    :String,
+    start_date:{
+        type    :Date,
         required:true
     },
-    end_time:{
-        type    :String,
+    end_date:{
+        type    :Date,
         required:true
     },
     min:{
@@ -36,6 +36,9 @@ const CourseSchema = new mongoose.Schema({
     max:{
         type    :Number,
         required:true
+    },
+    noOfStudents:{
+        type    :Number,
     }
 	
 });
