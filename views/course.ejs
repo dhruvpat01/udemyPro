@@ -88,11 +88,12 @@
         <% if(rol==="student"){ %>
         <div class="row justify-content-center ">
             <div class="col-lg-6">
-              <form action="/:<%= course.course_title %>" method="POST">
+              <form id="student_id" action="/:<%= course.course_title %>" method="POST" class="registerForm">
                 <input type="hidden" class="form-control" name='course_title' value="<%= course.course_title %>" >
                 <input type="hidden" class="form-control" name="start_date"value="<%= course.start_date %>" >
                 <input type="hidden" class="form-control" name="duration"  value="<%= course.duration %>">
-                <button type="submit" class="btn btn-dark btn-lg button1 j"  >Enroll</button>
+                <button type="submit" formaction="/:<%= course.course_title %>" method="POST" class="btn btn-dark btn-lg button1 j registerButton"  >Enroll</button>
+                
               </form>
                 
             </div>
@@ -100,8 +101,7 @@
         <% } %>
     </div>
     </div>
-    <% }%>
-    <% }); %>
+    
 </section>
 <% if(rol==="admin"){ %>
   <section>
@@ -109,10 +109,17 @@
     <ul>
       <% student.forEach(function(stud){ %>
       <li><%= stud.email %></li>
+     
       <% }); %>
     </ul>
+    <a  href="/pos">Send Email</a>
   </section>
 <% } %>
+<% }%>
+    <% }); %>
+   
+    <script src="/app.js"></script>
+    
 
 </body>
 

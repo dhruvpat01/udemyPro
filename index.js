@@ -6,9 +6,10 @@ const cookieParser = require('cookie-parser')
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const verifi = require("./verifyTokens")
-
+const moment = require("moment");
 var path = require('path')
 const ejs = require("ejs");
+const nodemailer = require("nodemailer");
 const User = require("./modals/users");
 const Course = require("./modals/courses");
 const Student = require("./modals/students")
@@ -18,7 +19,59 @@ const passwordValidator = require('password-validator');
 const check = new passwordValidator();
 let Logged_in=false
 let Role = ""
+let cour =""
+let m = moment()
+const cron = require('node-cron');
+s = Number(m.seconds())
+l = Number(m.minutes())
+console.log(s+" :"+l)
 
+cron.schedule('4 1 10 * * *', () => {
+	Student.find({},(err,foundUser)=>{
+		if(err){
+			console.log(err)
+		}
+		else{
+			let m = moment()
+			foundUser.forEach(function(stu){
+				let l = moment(stu.start_date)
+				
+				if(m.date()===l.date() && m.month()===l.month() && m.year()===l.year()){
+					const mailOptions = {
+						from : 'daksh008546@gmail.com',
+						to :stu.email,
+						subject :'Course Remainder',
+						text : 'Your Course is scheduled for tomorrow'
+					}
+					const transporter = nodemailer.createTransport({
+						service:'gmail',
+						auth :{
+							user:'daksh008546@gmail.com',
+							pass:process.env.PASS
+						}
+					})
+				  
+					transporter.sendMail(mailOptions,(error,info)=>{
+					  if(error){
+						  console.log(error)
+					  }else{
+						  console.log("Email sent : "+ info.response)
+					  }
+					})
+					
+				}
+				
+			});
+		}
+	})
+	console.log('running a task every minute');
+  });
+
+  
+
+// console.log(m.toISOString());
+// a=m.subtract(2,'d')
+// console.log(a.toISOString());
 
 
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
@@ -183,10 +236,6 @@ app.get("/logout",(req,res)=>{
 	res.redirect("/")
 })
 
-// app.get("/home", verifi,(req,res)=>{
-	
-// 	res.send("Hello World");
-// })
 
 //Admin side
 app.get("/admin",verifi,(req,res)=>{
@@ -204,6 +253,8 @@ app.get("/admin",verifi,(req,res)=>{
 app.post("/admin",(req,res)=>{
 	const { course_name,email,course_title,course_description,duration,start_date,end_date,min,max} = req.body;
 	console.log(req.body)
+	let l = moment(start_date)
+	console.log(l.date())
 	const newCourse = new Course({
 		course_name,
 		email,
@@ -304,7 +355,51 @@ app.get("/user",verifi,(req,res)=>{
 	// res.render("user");
 })
 
+app.get("/pos",verifi,(req,res)=>{
+	res.render("email")
+	
+})
 
+app.post("/pos",verifi,(req,res)=>{
+	message=req.body.mess
+	title = req.body.heading
+	// course_ti = req.body.course_title
+	Student.find({course_title:cour},(err,stu)=>{
+		if (err) {
+			console.log(err);
+		} else {
+			stu.forEach(function(stude){
+				const mailOptions = {
+					from : 'daksh008546@gmail.com',
+					to :stude.email,
+					subject :title,
+					text : message
+				}
+				const transporter = nodemailer.createTransport({
+					service:'gmail',
+					auth :{
+						user:'daksh008546@gmail.com',
+						pass:process.env.PASS
+					}
+				})
+			  
+				transporter.sendMail(mailOptions,(error,info)=>{
+				  if(error){
+					  console.log(error)
+				  }else{
+					  console.log("Email sent : "+ info.response)
+					  res.redirect("/")
+				  }
+				})
+			})
+
+			
+		
+		}
+
+	})
+	
+})
 
 
 
@@ -312,7 +407,8 @@ app.get("/user",verifi,(req,res)=>{
 //Course_Profile
 app.get('/:topic', verifi, (req, res) => {
 	const re = req.params.topic;
-	console.log(re);
+	cour = req.params.topic;
+	
 	
 	Course.find({}, (err, courses) => {
 		if (err) {
@@ -369,6 +465,8 @@ app.post('/:topic',verifi, (req, res)=>{
 	})
 	
 });
+
+
 
 
 

@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+
+  
+    <!-- bootstrap cdn -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+        integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <!-- css file -->
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+
+
+    <!-- logo -->
+    <link rel="shortcut icon" href="images/student.png" type="image" />
+
+
+</head>
+
+<body>
+    
+    <div class="container-fluid cont-login">
+        <div class="row">
+             
+
+            <div class="col-sm-12 col-md-6 col-lg-7 right-side">
+
+                <div class="login-form">
+                    <h2 class="sign">Send Email</h2>
+                    <br>
+
+                    <hr class="hr-text" data-content="OR">
+
+                    <form action="pos" method="POST">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text"class="form-control" name="heading" placeholder="title">
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea name="mess" id="" cols="40" rows="3" placeholder="write your message here"></textarea>
+                        </div>
+                        <button type="submit" formaction="/pos"  class="btn btn-dark btn-lg button1 loginButton" >Post</button>
+                    </form>
+                    
+                </div>
+
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-5 left-side d-none d-md-block">
+                <div class="container">
+                    <div class="row login-left">
+                        <p class="brand-name"></p>
+                        <p class="brand-desc">.</p>
+                        <img class="img-fluid animated bounce infinite" src="">
+                    </div>
+
+                </div>
+            </div>  
+        </div>
+    </div> 
+</body>
+
+</html>
