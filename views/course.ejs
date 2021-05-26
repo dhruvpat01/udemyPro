@@ -1,24 +1,6 @@
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <title>Register</title>
-
-    <!-- css file -->
-    
-
-    <!-- bootstrap cdn -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
-    <!-- <link rel="shortcut icon" href="https://img.icons8.com/fluent/48/000000/pets.png" type="image" /> -->
-    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+<%-include("partials/header")%>
 
 
-</head>
-
-<body>
 
 <section class="head_nav">
   <nav class="navbar navbar-expand-lg navbar-light bg-light op">
@@ -33,21 +15,21 @@
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/login">login</a>
+            <a class="nav-link" href="/login">Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/logout">logout</a>
+            <a class="nav-link" href="/logout">Logout</a>
           </li>
           <%if(rol==="admin"){%>
             <li class="nav-item">
-              <a class="nav-link" href="/admin">create_course</a>
+              <a class="nav-link" href="/admin">Create_Course</a>
             </li>
           <%}%>
           <li class="nav-item">
-            <a class="nav-link" href="/user">user</a>
+            <a class="nav-link" href="/user">User</a>
           </li>
         </ul>
       </div>
